@@ -1,13 +1,7 @@
 'use strict';
 const inbox = document.getElementById('inbox');
-for (const email of EMAILS) {
-  const item = document.createElement('article');
-  for (const [tag, value, className] of [['p',email.sender,'sender'],['h3',email.subject,''],['p',email.body || '(Body unavailable)','']]) {
-    const node = document.createElement(tag);
-    node.textContent = value;
-    node.className = className;
-    item.append(node);
-  }
-  inbox.append(item);
-}
-document.getElementById('status').textContent = `${EMAILS.length} sample emails loaded. Classification not yet implemented.`;
+const version = document.getElementById('version');
+function add(parent,tag,value,cls=''){const node=document.createElement(tag);node.className=cls;node.textContent=value;parent.append(node);return node;}
+function highlighted(parent,tag,value,signals){const node=add(parent,tag,'');let cursor=0;const ranges=signals.map(s=>({start:value.indexOf(s),length:s.length})).filter(r=>r.start>=0).sort((a,b)=>a.start-b.start);for(const r of ranges){if(r.start<cursor)continue;node.append(document.createTextNode(value.slice(cursor,r.start)));add(node,'mark',value.slice(r.start,r.start+r.length));cursor=r.start+r.length;}node.append(document.createTextNode(value.slice(cursor)));}
+function render(){const rows=EMAILS.map(email=>({email,...classify(email,version.value)})).sort((a,b)=>Number(b.priority==='High')-Number(a.priority==='High'));inbox.replaceChildren();document.getElementById('status').textContent=`${rows.length} emails · ${rows.filter(r=>r.priority==='High').length} High · ${rows.filter(r=>r.review).length} flagged for review`;for(const r of rows){const item=add(inbox,'article','');add(item,'p',r.email.sender,'sender');add(item,'span',r.priority+' — suggested',r.priority==='High'?'high':'normal');highlighted(item,'h3',r.email.subject,r.evidence.filter(e=>e.field==='subject').map(e=>e.text));highlighted(item,'p',r.email.body||'(Body unavailable)',r.evidence.filter(e=>e.field==='body').map(e=>e.text));add(item,'p','Why: '+r.reason,'reason');if(r.review)add(item,'p','Review needed — check the available original message.','review');}}
+version.addEventListener('change',render);render();
