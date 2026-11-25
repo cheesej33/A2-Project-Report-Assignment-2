@@ -91,7 +91,7 @@ The classifier uses narrow English keyword patterns and cannot reliably interpre
 
 ## AI assistance
 
-ChatGPT assisted substantially with planning, code generation and revision, classifier tests, documentation, architecture diagram and storyboard layout. The student supplied the Lab 3 materials, ran the application and tests locally, performed manual interaction checks, captured screenshots and managed Git commits. The final README was drafted with ChatGPT using the submitted source archive and reported test results. No live AI service is used by the prototype itself.
+ChatGPT assisted with code generation and revision, classifier tests, documentation polishing, and the generation of the architecture diagram and storyboards. The student completed the project planning and the main writing of the documentation, and ran and tested the application locally. The final README was drafted with ChatGPT, based on the submitted source archive and the reported test results. The prototype itself does not use any live AI service.
 
 ## Repository structure
 
