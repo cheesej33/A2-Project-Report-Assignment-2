@@ -1,0 +1,23 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.25",nodesep="0.35",ranksep="0.48",fontname="Helvetica",label="Email Priority Assistant — System Architecture",labelloc=t,fontsize=22];
+node [shape=box,style="rounded,filled",fillcolor="#eef4fa",color="#49647d",fontname="Helvetica",fontsize=12,margin="0.20,0.13"];
+edge [color="#526578",fontname="Helvetica",fontsize=10,arrowsize=.75];
+input [label="Sample email dataset\n5 messages · subject and body\nSIMULATED",fillcolor="#fff4dc",color="#ad8036"];
+classifier [label="Rule-based classifier\nV1: initial rules | V2: revised rules"];
+output [label="Classification output\nSuggested priority · explanation\nEvidence · review flag"];
+ui [label="Interactive ranked inbox\nOriginal suggestion + effective priority\nEvidence highlighting and review warning"];
+human [label="Human review\nInspect email and evidence\nKeep / Change / Undo",fillcolor="#e7f4eb",color="#508063"];
+state [label="Decision state and history\nVersion-specific overrides\nRestore previous state on undo"];
+storage [label="Browser LocalStorage\nPersist and restore decisions",shape=cylinder];
+future [label="Future extensions — PLANNED\nLive email integration · LLM classification\nPersonalised learning",style="rounded,dashed,filled",fillcolor="#f5f5f5",color="#999999"];
+input -> classifier [label="Email content"];
+classifier -> output;
+output -> ui;
+ui -> human [label="Present recommendation"];
+human -> state [label="User decision"];
+state -> ui [label="Update ranking and status",constraint=false];
+state -> storage [dir=both,label="Save / restore"];
+{rank=same; state; storage;}
+{rank=same; input; future;}
+input -> future [style=invis];
+}
